@@ -1,0 +1,20 @@
+import numpy as np
+
+input = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas tempor nisl, at congue magna condimentum sed. Aliquam erat volutpat. Vestibulum et elit ac neque vulputate eleifend vitae vel risus. Vestibulum quis dolor semper, scelerisque erat non, sodales nunc. Sed dui lorem, placerat nec convallis in, ullamcorper quis sapien. Aenean sed nisi lobortis, dictum lacus id, ultrices eros. Cras at ligula mauris. Vivamus facilisis felis quis consectetur dapibus. Aenean at diam dui. Curabitur dictum metus quis blandit gravida. Aenean at purus viverra, imperdiet elit ut, ornare quam. Nullam ante leo, vehicula in magna viverra, eleifend rhoncus metus. Etiam ac accumsan lorem, et commodo tortor. Quisque erat erat, gravida eu ante nec, tincidunt consequat velit. Nulla vestibulum metus scelerisque ante porta sodales. Vivamus elementum consectetur risus, vel porta augue molestie at. Suspendisse eget suscipit dui. Donec et tellus fermentum, maximus diam vitae, maximus massa. Pellentesque ut sapien varius, dignissim risus ut, gravida orci. Praesent consectetur metus eget neque porttitor, quis dapibus ante imperdiet. Mauris nec dolor quis lectus hendrerit tempus eu non lectus. Donec viverra tincidunt dui, et faucibus augue interdum eget. Mauris ac ex commodo, cursus leo in, rhoncus risus. Aliquam ultrices laoreet erat. Cras id congue ligula. Sed facilisis tempor dignissim. Nulla cursus ligula ut orci interdum mattis. Praesent pharetra mollis vestibulum. Suspendisse a finibus nunc. Nunc massa neque, dapibus vel nisi sed, semper faucibus turpis. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent aliquet, leo sit amet faucibus sodales, ante ligula bibendum risus, ac interdum neque risus nec orci. Cras in dignissim dolor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris egestas tincidunt velit. Proin libero arcu, maximus vitae odio quis, volutpat gravida nibh. Curabitur imperdiet felis ac ex dictum aliquet. Vivamus lacinia quis ex vitae ultricies. Nam maximus massa eget luctus auctor. Donec ornare ex id quam feugiat, nec gravida sem accumsan. Maecenas suscipit orci pulvinar est aliquet egestas. Integer id nulla sagittis, sagittis lacus sit amet, tincidunt mi. Ut suscipit nibh accumsan lectus tincidunt, sed convallis purus tincidunt. Maecenas et efficitur quam. Ut eu mollis lectus. Maecenas id molestie mi. Vestibulum eu suscipit elit. Nullam tristique, augue ac luctus tincidunt, orci nisi posuere odio, ac tempus risus mauris in urna. Suspendisse potenti. Aenean scelerisque efficitur nisl eu posuere. Aliquam dapibus convallis congue. Mauris justo augue, accumsan consequat nibh eget, cursus ultricies felis. Etiam ornare accumsan nisi, dictum vulputate erat porttitor vel. In blandit, elit ut facilisis ultricies, lacus purus vehicula massa, nec ultrices dolor quam et mauris. Pellentesque bibendum, erat non rhoncus tincidunt, eros ligula luctus elit, sit amet elementum libero tortor vitae neque. Cras in efficitur ipsum. Nulla congue massa enim, ut porttitor leo interdum a."
+clear_input = input.replace(',','').replace('.','').lower().split(' ') #{T}
+probabilites = {word:clear_input.count(word)/len(clear_input) for word in set(clear_input)}
+arr = np.array(list(probabilites.keys())) #{W}
+p = np.array(list(probabilites.values())) # probabilites assigned to each word in text
+
+surprise = np.log(1/p) #calculating surprises for each word
+entropy = sum(p * surprise) #mean value of entropy
+std_dev_surprise = np.sum((surprise - entropy)**2 * p)**0.5 #standard deviation of surprise
+print(f"Mean surprise in the text: {entropy}, standard deviation of surprise in the text: {std_dev_surprise}\n")
+#calculating the cutoff point
+k = (np.log(len(clear_input)) - entropy)/std_dev_surprise
+print(f"Limit of k is equal to {k}, so our k will be equal to {int(k)}")
+# words with bigger surprise than entropy + 2 standard deviations of entropy
+print("Set of words that carry bigger surprise than cutoff-point are:")
+print(arr[surprise > entropy+int(k)*std_dev_surprise],"\n") # {S}
+
+
