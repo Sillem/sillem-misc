@@ -1,0 +1,1 @@
+# Projekt stworzenia sieci NLP od zera, z założeniem braku użycia zewnętrznych bibliotek.
